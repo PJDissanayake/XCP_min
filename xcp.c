@@ -3,7 +3,7 @@
   XCP.c
   For STM32 microcontrollers
   Author:   Pathum J Dissanayake
-  Updated:  May 20, 2025
+  Created:  May 20, 2025
   ******************************************************************************
 **/
 
