@@ -30,8 +30,13 @@ Created: May 20, 2025
 #define XCP_ERR_OUT_OF_RANGE 0x22
 
 /* Buffer Sizes */
-#define XCP_MAX_CTO     8
-#define XCP_MAX_DTO     8
+#define XCP_MAX_CTO    8
+#define XCP_MAX_DTO    8
+
+
+#define XCP_PROTOCOL_VERSION     0x01
+#define XCP_TRANSPORT_VERSION    0x01
+
 
 /* Memory Regions (STM32F1xx) */
 #define FLASH_START     0x08000000
@@ -44,9 +49,11 @@ void XCP_CommandHandler(uint8_t *cmd, uint8_t *res);
 void XCP_Task(void);
 bool ValidateAddress(uint32_t addr);
 
-static volatile uint32_t mta_address = 0;
-static volatile uint8_t mta_extension = 0;
-static volatile bool spi_busy = false;
+extern volatile uint32_t mta_address;
+extern volatile uint8_t mta_extension;
+
+
+
 
 /* Command Handlers */
 void XCP_Connect(uint8_t *cmd, uint8_t *res);
@@ -57,4 +64,4 @@ void XCP_SetMTA(uint8_t *cmd, uint8_t *res);
 void XCP_Upload(uint8_t *cmd, uint8_t *res);
 void XCP_Download(uint8_t *cmd, uint8_t *res);
 
-#endif /* XCP_H 
+#endif /* XCP_H */

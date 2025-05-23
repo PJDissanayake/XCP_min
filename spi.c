@@ -7,6 +7,8 @@
 
 #include "spi.h"
 #include "xcp.h"
+#include "main.h"
+#include <string.h>
 
 SPI_HandleTypeDef hspi1;
 DMA_HandleTypeDef hdma_spi1_rx;
@@ -34,3 +36,29 @@ void SPI_Init(void)
         Error_Handler();
     }
 }
+
+void SPI_Start(void)
+{
+	    memset(rxBuffer, 0, SPI_BUFFER_SIZE);
+	    memset(txBuffer, 0, SPI_BUFFER_SIZE);
+	    HAL_SPI_TransmitReceive_DMA(&hspi1, txBuffer, rxBuffer, SPI_BUFFER_SIZE);
+
+}
+
+void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
+{
+    if (hspi == &hspi1)
+    {
+        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+        memset(txBuffer, 0, SPI_BUFFER_SIZE);
+        XCP_CommandHandler(rxBuffer, txBuffer);
+        memset(rxBuffer, 0, SPI_BUFFER_SIZE);
+        HAL_SPI_TransmitReceive_DMA(&hspi1, txBuffer, rxBuffer, SPI_BUFFER_SIZE);
+    }
+}
+
+
+
+
+
+

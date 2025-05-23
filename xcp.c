@@ -15,6 +15,10 @@ Created: May 20, 2025
 extern uint8_t rxBuffer[];
 extern uint8_t txBuffer[];
 
+volatile uint32_t mta_address = 0;
+volatile uint8_t mta_extension = 0;
+volatile bool spi_busy = false;
+
 
 bool ValidateAddress(uint32_t addr) {
     /* Check, address is within valid memory regions */
@@ -27,15 +31,17 @@ bool ValidateAddress(uint32_t addr) {
 
 /* Command Handlers */
 void XCP_Connect(uint8_t *cmd, uint8_t *res) {
+    memset(res, 0, XCP_MAX_DTO);
     res[0] = XCP_PID_RES;
-    res[1] = 0x01;  // Resource: Calibration
+    res[1] = 0x20;  // Resource: Calibration + Page Switching (adjust if needed)
     res[2] = XCP_MAX_CTO;
-    res[3] = 0x00;
+    res[3] = 0x00;  // Comm mode
     res[4] = XCP_MAX_DTO;
-    res[5] = 0x01;  // XCP v1.0
-    res[6] = 0x01;  // Transport v1.0
+    res[5] = XCP_PROTOCOL_VERSION;
+    res[6] = XCP_TRANSPORT_VERSION;
     res[7] = 0x00;
 }
+
 
 void XCP_Disconnect(uint8_t *cmd, uint8_t *res) {
     res[0] = XCP_PID_RES;
@@ -51,13 +57,21 @@ void XCP_Synch(uint8_t *cmd, uint8_t *res) {
 }
 
 void XCP_SetMTA(uint8_t *cmd, uint8_t *res) {
-    /* Use only 32-bit addressing */
-    mta_address = (uint32_t)cmd[4] |
-                 ((uint32_t)cmd[5] << 8) |
-                 ((uint32_t)cmd[6] << 16) |
-                 ((uint32_t)cmd[7] << 24);
+    uint32_t addr = (uint32_t)cmd[4] |
+                   ((uint32_t)cmd[5] << 8) |
+                   ((uint32_t)cmd[6] << 16) |
+                   ((uint32_t)cmd[7] << 24);
+
+    if (!ValidateAddress(addr)) {
+        res[0] = XCP_PID_ERR;
+        res[1] = XCP_ERR_OUT_OF_RANGE;
+        return;
+    }
+
+    mta_address = addr;
     res[0] = XCP_PID_RES;
 }
+
 
 void XCP_Upload(uint8_t *cmd, uint8_t *res) {
     uint8_t length = cmd[1];
@@ -104,16 +118,11 @@ void XCP_CommandHandler(uint8_t *cmd, uint8_t *res) {
         case XCP_DOWNLOAD:   XCP_Download(cmd, res);   break;
         default:
             res[0] = XCP_PID_ERR;
-            res[1] = XCP_ERR_CMD_UNKNOWN;
+           // res[1] = XCP_ERR_CMD_UNKNOWN;
             break;
     }
 }
 
-void XCP_Task(void) {
-    if(!spi_busy && (HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_READY)) {
-        spi_busy = true;
-        HAL_SPI_TransmitReceive_IT(&hspi1, txBuffer, rxBuffer, XCP_MAX_CTO);
-    }
-}
+
 
 
