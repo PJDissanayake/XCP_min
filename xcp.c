@@ -118,7 +118,7 @@ void XCP_CommandHandler(uint8_t *cmd, uint8_t *res) {
         case XCP_DOWNLOAD:   XCP_Download(cmd, res);   break;
         default:
             res[0] = XCP_PID_ERR;
-           // res[1] = XCP_ERR_CMD_UNKNOWN;
+            res[1] = XCP_ERR_CMD_UNKNOWN;
             break;
     }
 }
