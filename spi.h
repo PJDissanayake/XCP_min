@@ -2,13 +2,13 @@
  * spi.h
  *
  *  Created on: May 21, 2025
- *      Author: pathu
+ *      Author: pathum Dissanayake
  */
 
 #ifndef SPI_H
 #define SPI_H
 
-#include "stm32f1xx_hal.h"
+#include "stm32f4xx_hal.h"
 
 #define SPI_BUFFER_SIZE 8
 
