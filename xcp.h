@@ -1,15 +1,17 @@
-/**
-******************************************************************************
-XCP.h
-Author: Pathum
-Created: May 20, 2025
-******************************************************************************/
+/*
+ * xcp.h
+ *
+ *  Created on: May 20, 2025
+ *      Author: pathum Dissanayake
+ */
 
 #ifndef XCP_H
 #define XCP_H
 
 #include <stdint.h>
 #include <stdbool.h>
+
+extern volatile bool spi_busy;
 
 /* XCP Command Packet Identifiers (PIDs) */
 #define XCP_CONNECT     0xFF
@@ -20,29 +22,30 @@ Created: May 20, 2025
 #define XCP_UPLOAD      0xF5
 #define XCP_DOWNLOAD    0xF0
 
+#define DUMMY_DATA      0xAA
+
 /* XCP Response Packet Identifiers */
 #define XCP_PID_RES     0xFF
 #define XCP_PID_ERR     0xFE
 
 /* Error Codes */
-#define XCP_ERR_CMD_UNKNOWN 0x20
+#define XCP_ERR_CMD_UNKNOWN  0x20
 #define XCP_ERR_CMD_SYNTAX  0x21
 #define XCP_ERR_OUT_OF_RANGE 0x22
+#define XCP_ERR_CMD_BUSY    0x10
 
 /* Buffer Sizes */
 #define XCP_MAX_CTO    8
 #define XCP_MAX_DTO    8
 
-
 #define XCP_PROTOCOL_VERSION     0x01
 #define XCP_TRANSPORT_VERSION    0x01
 
-
-/* Memory Regions (STM32F1xx) */
+/* Memory Regions (STM32F407xx) */
 #define FLASH_START     0x08000000
-#define FLASH_SIZE      (128*1024)
+#define FLASH_SIZE      (1024*1024) // 1MB for STM32F407xx
 #define RAM_START       0x20000000
-#define RAM_SIZE        (64*1024)
+#define RAM_SIZE        (128*1024)  // 128KB for STM32F407xx
 
 /* Function Prototypes */
 void XCP_CommandHandler(uint8_t *cmd, uint8_t *res);
@@ -51,9 +54,6 @@ bool ValidateAddress(uint32_t addr);
 
 extern volatile uint32_t mta_address;
 extern volatile uint8_t mta_extension;
-
-
-
 
 /* Command Handlers */
 void XCP_Connect(uint8_t *cmd, uint8_t *res);
