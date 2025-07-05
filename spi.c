@@ -2,7 +2,7 @@
  * spi.c
  *
  *  Created on: May 22, 2025
- *      Author: pathum Dissanayake
+ *      Author: Pathum Dissanayake
  */
 
 #include "spi.h"
