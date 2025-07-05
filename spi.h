@@ -2,7 +2,7 @@
  * spi.h
  *
  *  Created on: May 21, 2025
- *      Author: pathum Dissanayake
+ *      Author: Pathum Dissanayake
  */
 
 #ifndef SPI_H
