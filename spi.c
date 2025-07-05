@@ -2,7 +2,7 @@
  * spi.c
  *
  *  Created on: May 22, 2025
- *      Author: pathu
+ *      Author: pathum Dissanayake
  */
 
 #include "spi.h"
@@ -16,6 +16,8 @@ DMA_HandleTypeDef hdma_spi1_tx;
 
 uint8_t rxBuffer[SPI_BUFFER_SIZE];
 uint8_t txBuffer[SPI_BUFFER_SIZE];
+
+
 
 void SPI_Init(void)
 {
@@ -39,26 +41,22 @@ void SPI_Init(void)
 
 void SPI_Start(void)
 {
-	    memset(rxBuffer, 0, SPI_BUFFER_SIZE);
-	    memset(txBuffer, 0, SPI_BUFFER_SIZE);
-	    HAL_SPI_TransmitReceive_DMA(&hspi1, txBuffer, rxBuffer, SPI_BUFFER_SIZE);
-
+    memset(rxBuffer, 0, SPI_BUFFER_SIZE);
+    memset(txBuffer, 0, SPI_BUFFER_SIZE);
+    HAL_SPI_TransmitReceive_DMA(&hspi1, txBuffer, rxBuffer, SPI_BUFFER_SIZE);
 }
 
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
     if (hspi == &hspi1)
     {
-        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-        memset(txBuffer, 0, SPI_BUFFER_SIZE);
+
+        HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
         XCP_CommandHandler(rxBuffer, txBuffer);
         memset(rxBuffer, 0, SPI_BUFFER_SIZE);
         HAL_SPI_TransmitReceive_DMA(&hspi1, txBuffer, rxBuffer, SPI_BUFFER_SIZE);
     }
 }
-
-
-
 
 
 
