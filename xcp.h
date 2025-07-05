@@ -2,7 +2,7 @@
  * xcp.h
  *
  *  Created on: May 20, 2025
- *      Author: pathum Dissanayake
+ *      Author: Pathum Dissanayake
  */
 
 #ifndef XCP_H
