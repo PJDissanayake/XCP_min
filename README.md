@@ -32,7 +32,7 @@ This library provides a lightweight implementation of the XCP (Universal Measure
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/<your-username>/<your-repo-name>.git
+   git clone https://github.com/PJDissanayake/XCP_min.git
    ```
 2. Copy the `spi.c`, `spi.h`, `xcp.c`, and `xcp.h` files into your STM32 project.
 3. Include the necessary HAL libraries in your project configuration.
@@ -58,7 +58,7 @@ This library provides a lightweight implementation of the XCP (Universal Measure
 int main(void) {
     // Initialize system and peripherals
     HAL_Init();
-    SystemClock_Config(); // Configure your system clock
+    SystemClock_Config();
     SPI_Init();           // Initialize SPI
     SPI_Start();          // Start SPI communication
 
