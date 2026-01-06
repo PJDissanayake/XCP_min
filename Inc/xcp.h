@@ -22,6 +22,11 @@ extern volatile bool spi_busy;
 #define XCP_UPLOAD      0xF5
 #define XCP_DOWNLOAD    0xF0
 
+#define XCP_PROGRAM_START  0xD2
+#define XCP_PROGRAM_CLEAR  0xD1
+#define XCP_PROGRAM        0xD0
+#define XCP_PROGRAM_RESET  0xCF
+
 #define DUMMY_DATA      0xAA
 
 /* XCP Response Packet Identifiers */
